@@ -61,8 +61,8 @@ public class PropertyServlet extends HttpServlet{
 					
 					if(session.getAttribute("location") != null)
 					{
-						final Location location = (Location)session.getAttribute("location");
-						property.setQuoteId(location.getQuoteId());
+//						final Location location = (Location)session.getAttribute("location");
+//						property.setQuoteId(location.getQuoteId());
 					}
 					final PropertyBO propertyBo = new PropertyBO();
 					propertyBo.saveProperty(property);
