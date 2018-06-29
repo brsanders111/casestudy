@@ -12,7 +12,7 @@ public class Property {
 	private int marketValue = 0;
 	private int yearBuilt = 0;
 	private int squareFootage = 0;
-	private int dwellingStyle = 0;
+	private double dwellingStyle = 0.0;
 	private String roofMaterial = null;
 	private String garageType = null;
 	private int numFullBaths = 0;
@@ -70,13 +70,13 @@ public class Property {
 	/**
 	 * @return the dwellingStyle
 	 */
-	public int getDwellingStyle() {
+	public double getDwellingStyle() {
 		return dwellingStyle;
 	}
 	/**
 	 * @param dwellingStyle the dwellingStyle to set
 	 */
-	public void setDwellingStyle(final int dwellingStyle) {
+	public void setDwellingStyle(final double dwellingStyle) {
 		this.dwellingStyle = dwellingStyle;
 	}
 	/**

@@ -45,7 +45,7 @@ public class PropertyDAO {
 				property.setMarketValue(resultSet.getInt(2));
 				property.setYearBuilt(resultSet.getInt(3));
 				property.setSquareFootage(resultSet.getInt(4));
-				property.setDwellingStyle(resultSet.getInt(5));
+				property.setDwellingStyle(resultSet.getDouble(5));
 				property.setRoofMaterial(resultSet.getString(6));
 				property.setGarageType(resultSet.getString(7));
 				property.setNumFullBaths(resultSet.getInt(8));
@@ -96,7 +96,7 @@ public class PropertyDAO {
 			stmt.setInt(2, property.getMarketValue());
 			stmt.setInt(3, property.getYearBuilt());
 			stmt.setInt(4, property.getSquareFootage());
-			stmt.setInt(5, property.getDwellingStyle());
+			stmt.setDouble(5, property.getDwellingStyle());
 			stmt.setString(6, property.getRoofMaterial());
 			stmt.setString(7, property.getGarageType());
 			stmt.setInt(8, property.getNumFullBaths());

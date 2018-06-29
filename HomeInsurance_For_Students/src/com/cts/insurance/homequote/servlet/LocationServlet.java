@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.*;
 import org.apache.log4j.Logger;
 
 import com.cts.insurance.homequote.bo.LocationBO;
@@ -54,6 +55,7 @@ public class LocationServlet extends HttpServlet{
 				location.setResidenceType(request.getParameter(HomeInsuranceConstants.RESIDENCE_TYPE));
 				location.setZip(request.getParameter(HomeInsuranceConstants.ZIP));
 				location.setResidenceUse(request.getParameter(HomeInsuranceConstants.RESIDENCE_USE));
+				location.setUserName(request.getParameter(HomeInsuranceConstants.USER_NAME));
 				
 				
 				// LocationBO locationBO = new LocationBO();

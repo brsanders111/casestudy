@@ -16,7 +16,7 @@ public final class SqlQueries {
 	public static final String SAVE_LOCATION = "INSERT INTO Locations (QUOTE_ID, RESIDENCE_TYPE, " +
 			"ADDRESS_LINE_1, ADDRESS_LINE_2, CITY, STATE, ZIP, RESIDENCE_USE, USER_NAME) " +
 			"VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
-	public static final String GET_QUOTE_ID = "SELECT QUOTE_ID from Location where RESIDENCE_TYPE = ? and " +
+	public static final String GET_QUOTE_ID = "SELECT QUOTE_ID from Locations where RESIDENCE_TYPE = ? and " +
 			"ADDRESS_LINE_1 = ? and ADDRESS_LINE_2 = ? and CITY = ? and STATE = ? and ZIP = ? and RESIDENCE_USE = ? and USER_NAME = ?";
 	
 	public static final String SAVE_HOMEOWNER = "INSERT INTO HomeownerInfo (QUOTE_ID, FIRST_NAME, LAST_NAME, " +
