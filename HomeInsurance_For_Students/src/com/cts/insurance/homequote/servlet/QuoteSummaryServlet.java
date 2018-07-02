@@ -5,10 +5,16 @@
  * @contact Cognizant
  * @version 1.0
  */
+/**
+ * Servlet for capturing Quote summary information
+ * 
+ * @author Cognizant
+ * @contact Cognizant
+ * @version 1.0
+ */
 package com.cts.insurance.homequote.servlet;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -18,14 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 import org.apache.log4j.Logger;
 
 import com.cts.insurance.homequote.bo.HomeownerBO;
 import com.cts.insurance.homequote.bo.LocationBO;
 import com.cts.insurance.homequote.bo.PropertyBO;
 import com.cts.insurance.homequote.bo.QuoteBO;
+import com.cts.insurance.homequote.model.Homeowner;
 import com.cts.insurance.homequote.model.Location;
+import com.cts.insurance.homequote.model.Quote;
 import com.cts.insurance.homequote.util.HomeInsuranceConstants;
 
 public class QuoteSummaryServlet extends HttpServlet{
@@ -57,19 +64,22 @@ public class QuoteSummaryServlet extends HttpServlet{
 				
 				final LocationBO locationBO = new LocationBO();
 				final List<Location> locationList = locationBO.getQuoteIds(userName);
+				
 				request.setAttribute("locationList", locationList);
 				forward = HomeInsuranceConstants.RETRIEVE_QUOTE;
 			}
 			else
 			{
 				final int quoteId = Integer.parseInt(request.getParameter("quoteIdSelected"));
-				session.setAttribute("quoteId", Integer.valueOf(quoteId));
+				session.setAttribute("quoteId", quoteId);
 				
 				final LocationBO locationBO = new LocationBO();
 				request.setAttribute("location", locationBO.getHomeLocation(quoteId));
 				
 				final HomeownerBO homeownerBO = new HomeownerBO();
-				request.setAttribute("homeowner", homeownerBO.getHomeownerInfo(quoteId));
+				Homeowner homeowner = homeownerBO.getHomeownerInfo(quoteId);
+				homeowner.setDob(homeowner.getDob().substring(0, 10));
+				request.setAttribute("homeowner", homeowner);
 				
 				final PropertyBO propertyBO = new PropertyBO();
 				request.setAttribute("property", propertyBO.getProperty(quoteId));
@@ -77,6 +87,7 @@ public class QuoteSummaryServlet extends HttpServlet{
 				final QuoteBO quoteBO = new QuoteBO();
 				session.setAttribute("quote", quoteBO.getQuote(quoteId));
 				forward = HomeInsuranceConstants.QUOTE_SUMMARY;
+				
 			}
 						
 			final RequestDispatcher dispatcher = request.getRequestDispatcher(forward);

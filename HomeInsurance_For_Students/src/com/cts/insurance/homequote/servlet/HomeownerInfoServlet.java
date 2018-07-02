@@ -1,4 +1,5 @@
 /**
+ /**
  * Servlet for capturing Homeowner information
  * 
  * @author Cognizant
@@ -8,6 +9,8 @@
 package com.cts.insurance.homequote.servlet;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,6 +51,10 @@ public class HomeownerInfoServlet extends HttpServlet{
 			{
 				//Get Request Parameters and set it to the data object
 				final Homeowner homeowner = new Homeowner();
+								
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date dob = sdf.parse(request.getParameter(HomeInsuranceConstants.DATE_OF_BIRTH));
+								
 				homeowner.setFirstName(request.getParameter(HomeInsuranceConstants.FIRST_NAME));
 				homeowner.setLastName(request.getParameter(HomeInsuranceConstants.LAST_NAME));
 				homeowner.setDob(request.getParameter(HomeInsuranceConstants.DATE_OF_BIRTH));
@@ -57,8 +64,8 @@ public class HomeownerInfoServlet extends HttpServlet{
 				
 				if(session.getAttribute("location") != null)
 				{
-					final Location location = (Location)session.getAttribute("location");
-					homeowner.setQuoteId(location.getQuoteId());
+//					final Location location = (Location)session.getAttribute("location");
+//					homeowner.setQuoteId(location.getQuoteId());
 				}
 				else
 				{
@@ -66,8 +73,8 @@ public class HomeownerInfoServlet extends HttpServlet{
 					logger.error(message);
 					throw new HomequoteSystemException(message);
 				}
-				final HomeownerBO homeownerBo = new HomeownerBO();
-				homeownerBo.saveHomeownerInfo(homeowner);
+//				final HomeownerBO homeownerBo = new HomeownerBO();
+//				homeownerBo.saveHomeownerInfo(homeowner);
 				session.setAttribute("homeowner", homeowner);
 				
 			}

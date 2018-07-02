@@ -1,4 +1,5 @@
 /**
+ /**
  * Servlet for capturing Login information
  * 
  * @author Cognizant
@@ -206,7 +207,7 @@ public class LoginServlet extends HttpServlet {
 				page = HomeInsuranceConstants.ERROR;
 			}
 			final RequestDispatcher dispatcher = req.getRequestDispatcher(page);
-			dispatcher.forward(req, res);				
+			dispatcher.forward(req, res);
 		} catch (Exception e) {
 			logger.error("Exception occurred while executing method LoginServlet.doPost :: " + e);
 			req.setAttribute(HomeInsuranceConstants.MESSAGE, e.getMessage());

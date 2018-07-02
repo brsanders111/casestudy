@@ -40,14 +40,17 @@ public class PolicyDAO {
 		ArrayList<Policy> policyList = null;
 		try
 		{
+			
 			final AbstractDAOFactory daoFactory = AbstractDAOFactory.getDaoFactory(HomeInsuranceConstants.MYSQL);
 			conn = daoFactory.getConnection();
 			//SELECT * from Policy p, Location l where p.QUOTE_ID= l.QUOTE_ID and l.USER_NAME = ?
 			stmt = conn.prepareStatement(SqlQueries.GET_POLICIES);
 			stmt.setString(1, userName);
 			resultSet = stmt.executeQuery();
+			
 			policyList = new ArrayList<Policy>();
 			while (resultSet.next()) {
+				
 				Policy policy = new Policy();
 				policy.setPolicyKey(resultSet.getString(1));
 				policy.setQuoteId(resultSet.getInt(2));

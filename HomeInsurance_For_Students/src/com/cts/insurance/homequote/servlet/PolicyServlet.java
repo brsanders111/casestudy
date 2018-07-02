@@ -1,4 +1,5 @@
 /**
+ /**
  * Servlet for capturing Policy information
  * 
  * @author Cognizant
@@ -8,6 +9,9 @@
 package com.cts.insurance.homequote.servlet;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,7 +51,23 @@ public class PolicyServlet extends HttpServlet{
 			{
 				final HttpSession session = request.getSession();
 				final String policyEffDate = request.getParameter("policyEffDate");
-
+				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				DateFormat tsdf = new SimpleDateFormat("MM/dd/yyyy");
+				Date date = sdf.parse(policyEffDate);
+				String formattedDate = tsdf.format(date);
+				Date fixedDate = tsdf.parse(formattedDate);
+				Date todaysD = new Date();
+				Date maxDate = new Date();
+				todaysD.setTime(0);
+				todaysD.setHours(0);
+				todaysD.setMinutes(0);
+				todaysD.setSeconds(0);
+				maxDate.setDate(maxDate.getDate()+60);
+				
+				if(!(fixedDate.after(todaysD) && fixedDate.before(maxDate) || fixedDate.equals(todaysD) || fixedDate.equals(maxDate))) {
+					throw new Exception();
+				}
+				
 				final int quoteId = ((Integer)session.getAttribute("quoteId")).intValue();
 				request.setAttribute("policy", policyBO.savePolicy(quoteId, policyEffDate, 1));
 				forwardPage = HomeInsuranceConstants.CONFIRM;	

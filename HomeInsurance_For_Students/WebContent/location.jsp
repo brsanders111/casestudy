@@ -49,6 +49,7 @@ function noBack()
 	<div align="center" style="width:800px; margin:0 auto;">
 	<table>
 		<tr>
+			<input type="hidden" name="userName" value="${userName}">
 			<td>Residence Type</td>
 			<td><select name="residenceType">
 					<option value="Single-Family Home">Single-Family Home</option>

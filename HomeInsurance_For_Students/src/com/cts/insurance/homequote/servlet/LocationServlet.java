@@ -1,4 +1,5 @@
 /**
+ /**
  * Servlet for capturing Location Information
  * 
  * @author Cognizant
@@ -16,11 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.*;
 import org.apache.log4j.Logger;
 
 import com.cts.insurance.homequote.bo.LocationBO;
-import com.cts.insurance.homequote.model.Homeowner;
 import com.cts.insurance.homequote.model.Location;
 import com.cts.insurance.homequote.util.HomeInsuranceConstants;
 
@@ -44,35 +43,28 @@ public class LocationServlet extends HttpServlet{
 		try {
 			final HttpSession session = request.getSession();
 			//Fill code here
-			
-			if(session.getAttribute("location") == null)
-			{
-				//Get Request Parameters and set it to the data object
+			if(session.getAttribute("location")==null) {
 				final Location location = new Location();
 				location.setAddressLine1(request.getParameter(HomeInsuranceConstants.ADDRESS_LINE_1));
 				location.setAddressLine2(request.getParameter(HomeInsuranceConstants.ADDRESS_LINE_2));
 				location.setCity(request.getParameter(HomeInsuranceConstants.CITY));
-				location.setResidenceType(request.getParameter(HomeInsuranceConstants.RESIDENCE_TYPE));
+				location.setState(request.getParameter(HomeInsuranceConstants.STATE));
 				location.setZip(request.getParameter(HomeInsuranceConstants.ZIP));
+				location.setResidenceType(request.getParameter(HomeInsuranceConstants.RESIDENCE_TYPE));
 				location.setResidenceUse(request.getParameter(HomeInsuranceConstants.RESIDENCE_USE));
 				location.setUserName(request.getParameter(HomeInsuranceConstants.USER_NAME));
 				
-				
-				// LocationBO locationBO = new LocationBO();
-				//final int qouteId = locationBO.saveHomeLocation(location);
-				//location.setQouteId(qouteId);
+//				LocationBO locationBO = new LocationBO();
+//				final int quoteId = locationBO.saveHomeLocation(location);
+//				location.setQuoteId(quoteId);
 				session.setAttribute("location", location);
 				String forwardPage = HomeInsuranceConstants.HOMEOWNER_INFO;
 				final RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
 				dispatcher.forward(request, response);
-			
-			
 			}
-			
 		} catch (Exception e) {
 			//Fill code here
-			logger.error("Exception occurred in method HomeownerInfoServlet.doPost :: "
-					+ e);
+			logger.error("Exception occurred in method LocationServlet.doPost :: " + e);
 			request.setAttribute("message", e.getMessage());
 			final RequestDispatcher dispatcher = request.getRequestDispatcher(HomeInsuranceConstants.ERROR);
 			dispatcher.forward(request, response);

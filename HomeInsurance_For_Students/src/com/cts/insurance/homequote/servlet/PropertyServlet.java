@@ -5,9 +5,19 @@
  * @contact Cognizant
  * @version 1.0
  */
+/**
+ * Servlet for capturing Property information
+ * 
+ * @author Cognizant
+ * @contact Cognizant
+ * @version 1.0
+ */
 package com.cts.insurance.homequote.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,13 +28,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.cts.insurance.homequote.bo.HomeownerBO;
+import com.cts.insurance.homequote.bo.LocationBO;
 import com.cts.insurance.homequote.bo.PropertyBO;
 import com.cts.insurance.homequote.bo.QuoteBO;
+import com.cts.insurance.homequote.dao.AbstractDAOFactory;
 import com.cts.insurance.homequote.model.Homeowner;
 import com.cts.insurance.homequote.model.Location;
 import com.cts.insurance.homequote.model.Property;
 import com.cts.insurance.homequote.model.Quote;
 import com.cts.insurance.homequote.util.HomeInsuranceConstants;
+import com.cts.insurance.homequote.util.SqlQueries;
 
 public class PropertyServlet extends HttpServlet{
 	
@@ -52,7 +66,7 @@ public class PropertyServlet extends HttpServlet{
 					property.setMarketValue(Integer.parseInt(request.getParameter(HomeInsuranceConstants.MARKET_VALUE)));
 					property.setYearBuilt(Integer.parseInt(request.getParameter(HomeInsuranceConstants.YEAR_BUILT)));
 					property.setSquareFootage(Integer.parseInt(request.getParameter(HomeInsuranceConstants.SQUARE_FOOTAGEG)));
-					property.setDwellingStyle(Double.parseDouble(request.getParameter(HomeInsuranceConstants.DWELLING_STYLE)));
+					property.setDwellingStyle(Integer.parseInt(request.getParameter(HomeInsuranceConstants.DWELLING_STYLE)));
 					property.setRoofMaterial(request.getParameter(HomeInsuranceConstants.ROOF_MATERIAL));
 					property.setGarageType(request.getParameter(HomeInsuranceConstants.GARAGE_TYPE));
 					property.setNumFullBaths(Integer.parseInt(request.getParameter(HomeInsuranceConstants.NUM_FULL_BATHS)));
@@ -64,9 +78,7 @@ public class PropertyServlet extends HttpServlet{
 //						final Location location = (Location)session.getAttribute("location");
 //						property.setQuoteId(location.getQuoteId());
 					}
-					final PropertyBO propertyBo = new PropertyBO();
-					propertyBo.saveProperty(property);
-					session.setAttribute("property", property);
+					
 					
 					final Homeowner homeowner = (Homeowner)session.getAttribute("homeowner");
 					final Location location = (Location)session.getAttribute("location");
@@ -74,7 +86,35 @@ public class PropertyServlet extends HttpServlet{
 					final QuoteBO quoteBO = new QuoteBO();
 					final Quote quote = quoteBO.calculateQuote(location, homeowner, property);
 					quoteBO.saveQuote(quote);
+					
+					final AbstractDAOFactory daoFactory = AbstractDAOFactory.getDaoFactory(HomeInsuranceConstants.MYSQL);
+					Connection conn = daoFactory.getConnection();
+					PreparedStatement stmt = conn.prepareStatement(SqlQueries.GET_QUOTEID_QUOTE);
+					ResultSet resultSet = stmt.executeQuery();
+					int quoteID = -1;
+					while(resultSet.next()) {
+						quoteID = resultSet.getInt(1);
+					}
+					
+					quote.setQuoteId(quoteID);
+					
+					final HomeownerBO homeownerBO = new HomeownerBO();
+					homeowner.setQuoteId(quoteID);
+					homeownerBO.saveHomeownerInfo(homeowner);
+					
+					final LocationBO locationBO = new LocationBO();
+					location.setQuoteId(quoteID);
+					locationBO.saveHomeLocation(location);
+					
+					final PropertyBO propertyBo = new PropertyBO();
+					property.setQuoteId(quoteID);
+					propertyBo.saveProperty(property);
+					
 					request.setAttribute("quote", quote);
+					session.setAttribute("quote", quote);
+					session.setAttribute("property", property);
+					session.setAttribute("homeowner", homeowner);
+					session.setAttribute("location", location);
 				}
 				final RequestDispatcher dispatcher = request.getRequestDispatcher(HomeInsuranceConstants.QUOTE);
 				dispatcher.forward(request, response);
